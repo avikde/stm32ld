@@ -10,6 +10,7 @@
 #include <sys/select.h>
 #include <sys/time.h>
 #include <sys/types.h>
+#include <sys/ioctl.h>
 
 static u32 ser_timeout = SER_INF_TIMEOUT;
 
@@ -127,6 +128,8 @@ int ser_setup( ser_handler id, u32 baud, int databits, int parity, int stopbits 
 
   // And set blocking mode by default
   fcntl( id, F_SETFL, 0 );
+
+  return 0;
 }
 
 // Read up to the specified number of bytes, return bytes actually read
@@ -180,5 +183,23 @@ u32 ser_write_byte( ser_handler id, u8 data )
 void ser_set_timeout_ms( ser_handler id, u32 timeout )
 {
   ser_timeout = timeout;
+}
+
+// entry sequence helper
+int ser_ctl(ser_handler id, int bit, int val) {
+  int flags;
+  ioctl(id, TIOCMGET, &flags);
+  flags = val ? flags | bit : flags & ~bit;
+  return ioctl(id, TIOCMSET, &flags);
+  usleep(10000);
+}
+
+// entry sequence
+int ser_entry(ser_handler id, entry_type_t ent) {
+  ser_ctl(id, TIOCM_RTS, 0);
+  ser_ctl(id, TIOCM_DTR, 0);
+  ser_ctl(id, TIOCM_DTR, 1);
+  usleep(200000);
+  return 0;
 }
 

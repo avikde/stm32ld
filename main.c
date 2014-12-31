@@ -15,8 +15,9 @@ static u32 fpsize;
 #define BL_MKVER( major, minor )    ( ( major ) * 256 + ( minor ) ) 
 #define BL_MINVERSION               BL_MKVER( BL_VERSION_MAJOR, BL_VERSION_MINOR )
 
+// Add other chip IDs here? Is there any reason to actually check this?
 #define CHIP_ID           0x0414
-#define CHIP_ID_ALT           0x0413
+#define CHIP_ID_ALT       0x0413
 
 // ****************************************************************************
 // Helper functions and macros
@@ -126,11 +127,11 @@ int main( int argc, const char **argv )
   else
   {
     printf( "Chip ID: %04X\n", version );
-    if( version != CHIP_ID && version != CHIP_ID_ALT )
-    {
-      fprintf( stderr, "Unsupported chip ID" );
-      exit( 1 );
-    }
+    // if( version != CHIP_ID && version != CHIP_ID_ALT )
+    // {
+    //   fprintf( stderr, "Unsupported chip ID\n" );
+    //   exit( 1 );
+    // }
   }
   
   if( not_flashing == 0 )

@@ -1,6 +1,7 @@
 // STM32 bootloader client
 
 #include <stdio.h>
+#include <unistd.h>
 #include "serial.h"
 #include "type.h"
 #include "stm32ld.h"
@@ -31,6 +32,7 @@ static int stm32h_send_command( u8 cmd )
 {
   ser_write_byte( stm32_ser_id, cmd );
   ser_write_byte( stm32_ser_id, ~cmd );
+  return 0;
 }
 
 // Helper: read a byte from STM32 with timeout
@@ -67,12 +69,16 @@ static int stm32h_send_address( u32 address )
 // Helper: intiate BL communication
 static int stm32h_connect_to_bl()
 {
+  // TODO: put in retries, and try all the different entry sequences
   int res;
 
   // Flush all incoming data
   ser_set_timeout_ms( stm32_ser_id, SER_NO_TIMEOUT );
   while( stm32h_read_byte() != -1 );
   ser_set_timeout_ms( stm32_ser_id, STM32_COMM_TIMEOUT );
+
+  // New: entry sequence
+  ser_entry(stm32_ser_id, BOOT0_RTS_RESET_DTR);
 
   // Initiate communication
   ser_write_byte( stm32_ser_id, STM32_CMD_INIT );
@@ -102,7 +108,7 @@ int stm32_get_version( u8 *major, u8 *minor )
 {
   u8 i, version;
   int temp, total;
-  int tries = STM32_RETRY_COUNT;  
+  // int tries = STM32_RETRY_COUNT;  
 
   STM32_CHECK_INIT;
   stm32h_send_command( STM32_CMD_GET_COMMAND );
@@ -123,7 +129,7 @@ int stm32_get_version( u8 *major, u8 *minor )
 // Get chip ID
 int stm32_get_chip_id( u16 *version )
 {
-  u8 temp;
+  // u8 temp;
   int vh, vl;
 
   STM32_CHECK_INIT;

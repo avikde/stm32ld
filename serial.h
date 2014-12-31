@@ -28,6 +28,11 @@
 #define SER_DATABITS_7          7
 #define SER_DATABITS_8          8
 
+// Entry type
+typedef enum {
+  BOOT0_RTS_RESET_DTR, BOOT0_DTR_RESET_RTS
+} entry_type_t;
+
 // Serial access functions (to be implemented by each platform)
 ser_handler ser_open( const char *sername );
 void ser_close( ser_handler id );
@@ -37,5 +42,6 @@ int ser_read_byte( ser_handler id );
 u32 ser_write( ser_handler id, const u8 *src, u32 size );
 u32 ser_write_byte( ser_handler id, u8 data );
 void ser_set_timeout_ms( ser_handler id, u32 timeout );
+int ser_entry( ser_handler id, entry_type_t ent );
 
 #endif
