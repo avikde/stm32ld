@@ -177,7 +177,7 @@ int main( int argc, const char **argv )
 
     // Program flash
     setbuf( stdout, NULL );
-    printf( "Programming flash: ");
+    printf( "Programming flash...\n");
     if( stm32_write_flash( writeh_read_data, writeh_progress ) != STM32_OK )
     {
       fprintf( stderr, "Unable to program FLASH memory.\n" );
@@ -194,7 +194,7 @@ int main( int argc, const char **argv )
   if( send_go_command == 1 )
   {
     // Run GO
-    printf( "Sending go command ... \n" );
+    printf( "Sending go command...\n" );
     if( stm32_go_command( ) != STM32_OK )
     {
       fprintf( stderr, "Unable to run Go command.\n" );
