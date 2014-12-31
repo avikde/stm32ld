@@ -1,21 +1,21 @@
-STM32 Firmware Loader
-=====================
+# STM32 serial flash tool with auto-reset
 
-These C sources can be used to burn .bin (no hex support) firmware images to STM32 microcontrollers using the built-in serial bootloader.
+* Burn .bin (no hex support) firmware images to STM32 microcontrollers using the built-in serial bootloader.
+* This version automatically toggles DTR and RTS to try to auto-reset into bootloader mode. Currently works for BOOT0 = RTS, NRST = DTR, but the flipped version is a few easy modifications away.
 
-> Usage: stm32ld &lt;port&gt; &lt;baud&gt; &lt;binary image name|0 not to flash&gt; [&lt;0|1 to send Go command to new flashed app&gt;]
-  
+## Usage
 
-Building
---------
+```
+$ stm32ld <port> <baud> <binary image name|0 not to flash> [<0|1 to go to new flashed app>]
+```
 
-If lake is installed:
-> lake
+## Building
 
-Otherwise:
+On Windows (tested with Cygwin / Mingw), Mac and Linux:
+```
+make
+```
 
-Linux/Mac OS X:
-> gcc -o stm32ld main.c stm32ld.c serial_posix.c
-
+Auto-reset support, and other changes: Avik De <avikde@gmail.com>
 
 Original source author: Bogdan Marinescu <bogdan.marinescu@gmail.com>
