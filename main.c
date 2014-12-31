@@ -148,7 +148,7 @@ int main( int argc, const char **argv )
     // Erase flash
     if( major == 3 )
     {
-      printf( "Starting Extended Erase of FLASH memory. This will take some time ... Please be patient ...\n" );
+      // printf( "Starting Extended Erase of FLASH memory. This will take some time ... Please be patient ...\n" );
       if( stm32_extended_erase_flash() != STM32_OK )
       {
         fprintf( stderr, "Unable to extended erase chip\n" );
@@ -187,7 +187,7 @@ int main( int argc, const char **argv )
   if( send_go_command == 1 )
   {
     // Run GO
-    printf( "Sending Go command ... \n" );
+    printf( "Sending go command ... \n" );
     if( stm32_go_command( ) != STM32_OK )
     {
       fprintf( stderr, "Unable to run Go command.\n" );
