@@ -2,6 +2,7 @@
 
 * Burn .bin (no hex support) firmware images to STM32 microcontrollers using the built-in serial bootloader.
 * This version automatically toggles DTR and RTS to try to auto-reset into bootloader mode. Currently works for BOOT0 = RTS, NRST = DTR, but the flipped version is a few easy modifications away.
+* *Warning*: Does not check chip ID, or binary size (to ensure it will fit in the FLASH). Use with care!
 
 ## Usage
 
