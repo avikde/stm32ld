@@ -190,8 +190,9 @@ int ser_ctl(ser_handler id, int bit, int val) {
   int flags;
   ioctl(id, TIOCMGET, &flags);
   flags = val ? flags | bit : flags & ~bit;
-  return ioctl(id, TIOCMSET, &flags);
+  ioctl(id, TIOCMSET, &flags);
   usleep(10000);
+  return 0;
 }
 
 // entry sequence
@@ -199,7 +200,7 @@ int ser_entry(ser_handler id, entry_type_t ent) {
   ser_ctl(id, TIOCM_RTS, 0);
   ser_ctl(id, TIOCM_DTR, 0);
   ser_ctl(id, TIOCM_DTR, 1);
-  usleep(200000);
+  usleep(500000);
   return 0;
 }
 

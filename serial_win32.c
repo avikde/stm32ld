@@ -148,3 +148,19 @@ void ser_set_timeout_ms( ser_handler id, u32 timeout )
     ser_win32_set_timeouts( id, 0, 0, timeout, 0, 0 );
 }
 
+// entry sequence helper
+int ser_ctl(ser_handler id, int bit) {
+  EscapeCommFunction(id, bit);
+  usleep(10000);
+  return 0;
+}
+
+// entry sequence
+int ser_entry(ser_handler id, entry_type_t ent) {
+  ser_ctl(id, CLRRTS);
+  ser_ctl(id, CLRDTR);
+  ser_ctl(id, SETDTR);
+  usleep(200000);
+  return 0;
+}
+

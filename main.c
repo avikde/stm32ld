@@ -36,12 +36,19 @@ static u32 writeh_read_data( u8 *dst, u32 len )
 static void writeh_progress( u32 wrote )
 {
   unsigned pwrite = ( wrote * 100 ) / fpsize;
-  static int expected_next = 10;
+  // static int expected_next = 10;
+
+  // if( pwrite >= expected_next )
+  // {
+  //   printf( "%d%% ", expected_next );
+  //   expected_next += 10;
+  // }
+  static int expected_next = 2;
 
   if( pwrite >= expected_next )
   {
-    printf( "%d%% ", expected_next );
-    expected_next += 10;
+    printf("=");
+    expected_next += 2;
   }
 }
 
@@ -170,14 +177,14 @@ int main( int argc, const char **argv )
 
     // Program flash
     setbuf( stdout, NULL );
-    printf( "Programming flash ... ");
+    printf( "Programming flash: ");
     if( stm32_write_flash( writeh_read_data, writeh_progress ) != STM32_OK )
     {
       fprintf( stderr, "Unable to program FLASH memory.\n" );
       exit( 1 );
     }
     else
-      printf( "\nDone.\n" );
+      printf( "\n" );
 
     fclose( fp );
   }
