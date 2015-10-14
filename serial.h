@@ -28,11 +28,6 @@
 #define SER_DATABITS_7          7
 #define SER_DATABITS_8          8
 
-// Entry type
-typedef enum {
-  BOOT0_RTS_RESET_DTR, BOOT0_DTR_RESET_RTS
-} entry_type_t;
-
 // Serial access functions (to be implemented by each platform)
 ser_handler ser_open( const char *sername );
 void ser_close( ser_handler id );

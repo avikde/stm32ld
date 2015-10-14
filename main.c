@@ -43,12 +43,12 @@ static void writeh_progress( u32 wrote )
   //   printf( "%d%% ", expected_next );
   //   expected_next += 10;
   // }
-  static int expected_next = 2;
+  static int expected_next = 10;
 
   if( pwrite >= expected_next )
   {
     printf("=");
-    expected_next += 2;
+    expected_next += 10;
   }
 }
 
@@ -64,10 +64,11 @@ int main( int argc, const char **argv )
   long baud;
  
   // Argument validation
-  if( argc < 4 )
+  if( argc < 5 )
   {
-    fprintf( stderr, "Usage: stm32ld <port> <baud> <binary image name|0 to not flash> [<0|1 to send Go command to new flashed app>]\n" );
-    fprintf( stderr, "Note: Thanks to Go command you don't need to change status of BOOT0 after flashing,\n\t\ttake care after power cycle ...\n\n\n" );
+    fprintf( stderr, "Usage: stm32ld <port> <baud> <entry> <binary image name|0 to not flash> [<0|1 to send Go>]\n" );
+    fprintf( stderr, "       <entry> one of 'dtr_rts' (Mainboard v1) or 'mblc'\n" );
+    // fprintf( stderr, "Note: Thanks to Go command you don't need to change status of BOOT0 after flashing,\n\t\ttake care after power cycle ...\n\n\n" );
     exit( 1 );
   }
   errno = 0;
@@ -78,20 +79,20 @@ int main( int argc, const char **argv )
     exit( 1 );
   }
   
-  if( argc >= 5 && strlen(argv[ 4 ])==1 && strncmp(argv[ 4 ], "1", 1)==0 )
+  if( argc >= 6 && strlen(argv[ 5 ])==1 && strncmp(argv[ 5 ], "1", 1)==0 )
   {
     send_go_command=1;
   }
 
-  if( strlen(argv[ 3 ])==1 && strncmp(argv[ 3 ], "0", 1)==0 )
+  if( strlen(argv[ 4 ])==1 && strncmp(argv[ 4 ], "0", 1)==0 )
   {
     not_flashing=1;
   }
   else
   {
-    if( ( fp = fopen( argv[ 3 ], "rb" ) ) == NULL )
+    if( ( fp = fopen( argv[ 4 ], "rb" ) ) == NULL )
     {
-      fprintf( stderr, "Unable to open %s\n", argv[ 3 ] );
+      fprintf( stderr, "Unable to open %s\n", argv[ 4 ] );
       exit( 1 );
     }
     else
@@ -101,9 +102,15 @@ int main( int argc, const char **argv )
       fseek( fp, 0, SEEK_SET );
     }
   }
+
+  // new entry type
+  entry_type_t ent = MBLC;
+  if (strncmp(argv[3], "dtr_rts", 7) == 0) {
+    ent = MAINBOARD_V1;
+  }
   
   // Connect to bootloader
-  if( stm32_init( argv[ 1 ], baud ) != STM32_OK )
+  if( stm32_init( argv[ 1 ], baud, ent ) != STM32_OK )
   {
     fprintf( stderr, "Unable to connect to bootloader\n" );
     exit( 1 );
@@ -150,7 +157,7 @@ int main( int argc, const char **argv )
       exit( 1 );
     }
     else
-      printf( "Cleared write protection.\n" );
+      printf( "Cleared write protection\n" );
 
     // Erase flash
     if( major == 3 )
@@ -162,7 +169,7 @@ int main( int argc, const char **argv )
         exit( 1 );
       }
       else
-        printf( "Extended Erased FLASH memory.\n" );
+        printf( "Extended Erased FLASH memory\n" );
     }
     else
     {
@@ -172,12 +179,12 @@ int main( int argc, const char **argv )
         exit( 1 );
       }
       else
-        printf( "Erased FLASH memory.\n" );
+        printf( "Erased FLASH memory\n" );
     }
 
     // Program flash
     setbuf( stdout, NULL );
-    printf( "Programming flash...\n");
+    printf( "Programming flash: ");
     if( stm32_write_flash( writeh_read_data, writeh_progress ) != STM32_OK )
     {
       fprintf( stderr, "Unable to program FLASH memory.\n" );
@@ -189,12 +196,12 @@ int main( int argc, const char **argv )
     fclose( fp );
   }
   else
-    printf( "Skipping flashing ... \n" );
+    printf( "Skipping flashing\n" );
 
   if( send_go_command == 1 )
   {
     // Run GO
-    printf( "Sending go command...\n" );
+    printf( "Sending go command\n" );
     if( stm32_go_command( ) != STM32_OK )
     {
       fprintf( stderr, "Unable to run Go command.\n" );

@@ -7,6 +7,7 @@
 #include "stm32ld.h"
 
 static ser_handler stm32_ser_id = ( ser_handler )-1;
+entry_type_t g_ent = MBLC;
 
 #define STM32_RETRY_COUNT             10
 
@@ -78,7 +79,7 @@ static int stm32h_connect_to_bl()
   ser_set_timeout_ms( stm32_ser_id, STM32_COMM_TIMEOUT );
 
   // New: entry sequence
-  ser_entry(stm32_ser_id, BOOT0_RTS_RESET_DTR);
+  ser_entry(stm32_ser_id, g_ent);
 
   // Initiate communication
   ser_write_byte( stm32_ser_id, STM32_CMD_INIT );
@@ -89,8 +90,11 @@ static int stm32h_connect_to_bl()
 // ****************************************************************************
 // Implementation of the protocol
 
-int stm32_init( const char *portname, u32 baud )
+int stm32_init( const char *portname, u32 baud, entry_type_t ent)
 {
+  // set global
+  g_ent = ent;
+
   // Open port
   if( ( stm32_ser_id = ser_open( portname ) ) == ( ser_handler )-1 )
     return STM32_PORT_OPEN_ERROR;

@@ -197,10 +197,19 @@ int ser_ctl(ser_handler id, int bit, int val) {
 
 // entry sequence
 int ser_entry(ser_handler id, entry_type_t ent) {
-  ser_ctl(id, TIOCM_RTS, 0);
-  ser_ctl(id, TIOCM_DTR, 0);
-  ser_ctl(id, TIOCM_DTR, 1);
-  usleep(500000);
+  if (ent == MAINBOARD_V1) {
+    // mainboard v1
+    ser_ctl(id, TIOCM_RTS, 0);
+    ser_ctl(id, TIOCM_DTR, 0);
+    ser_ctl(id, TIOCM_DTR, 1);
+    usleep(500000);
+  } else if (ent == MBLC) {
+    ser_ctl(id, TIOCM_RTS, 0);
+    ser_ctl(id, TIOCM_DTR, 0);
+    ser_ctl(id, TIOCM_DTR, 1);
+    usleep(300000);
+    ser_ctl(id, TIOCM_DTR, 0);
+  }
   return 0;
 }
 
