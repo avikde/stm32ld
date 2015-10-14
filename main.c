@@ -43,12 +43,12 @@ static void writeh_progress( u32 wrote )
   //   printf( "%d%% ", expected_next );
   //   expected_next += 10;
   // }
-  static int expected_next = 10;
+  static int expected_next = 2;
 
   if( pwrite >= expected_next )
   {
     printf("=");
-    expected_next += 10;
+    expected_next += 2;
   }
 }
 
@@ -124,7 +124,7 @@ int main( int argc, const char **argv )
   }
   else
   {
-    printf( "Found bootloader version: %d.%d\n", major, minor );
+    printf( "Bootloader version: %d.%d; ", major, minor );
     if( BL_MKVER( major, minor ) < BL_MINVERSION )
     {
       fprintf( stderr, "Unsupported bootloader version" );
@@ -140,7 +140,7 @@ int main( int argc, const char **argv )
   }
   else
   {
-    printf( "Chip ID: %04X\n", version );
+    printf( "chip ID: %04X\n", version );
     // if( version != CHIP_ID && version != CHIP_ID_ALT )
     // {
     //   fprintf( stderr, "Unsupported chip ID\n" );
@@ -156,8 +156,9 @@ int main( int argc, const char **argv )
       fprintf( stderr, "Unable to execute write unprotect\n" );
       exit( 1 );
     }
-    else
-      printf( "Cleared write protection\n" );
+    else {
+      // printf( "Cleared write protection\n" );
+    }
 
     // Erase flash
     if( major == 3 )
@@ -168,8 +169,9 @@ int main( int argc, const char **argv )
         fprintf( stderr, "Unable to extended erase chip\n" );
         exit( 1 );
       }
-      else
-        printf( "Extended Erased FLASH memory\n" );
+      else {
+        // printf( "Extended Erased FLASH memory\n" );
+      }
     }
     else
     {
@@ -201,7 +203,7 @@ int main( int argc, const char **argv )
   if( send_go_command == 1 )
   {
     // Run GO
-    printf( "Sending go command\n" );
+    // printf( "Sending go command\n" );
     if( stm32_go_command( ) != STM32_OK )
     {
       fprintf( stderr, "Unable to run Go command.\n" );

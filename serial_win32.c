@@ -157,10 +157,19 @@ int ser_ctl(ser_handler id, int bit) {
 
 // entry sequence
 int ser_entry(ser_handler id, entry_type_t ent) {
-  ser_ctl(id, CLRRTS);
-  ser_ctl(id, CLRDTR);
-  ser_ctl(id, SETDTR);
-  usleep(200000);
+  if (ent == MAINBOARD_V1) {
+    // mainboard v1
+    ser_ctl(id, CLRRTS);
+    ser_ctl(id, CLRDTR);
+    ser_ctl(id, SETDTR);
+    usleep(500000);
+  } else if (ent == MBLC) {
+    ser_ctl(id, CLRRTS);
+    ser_ctl(id, CLRDTR);
+    ser_ctl(id, SETDTR);
+    usleep(300000);
+    ser_ctl(id, CLRDTR);
+  }
   return 0;
 }
 
