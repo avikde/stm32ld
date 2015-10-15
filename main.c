@@ -107,6 +107,8 @@ int main( int argc, const char **argv )
   entry_type_t ent = MBLC;
   if (strncmp(argv[3], "dtr_rts", 7) == 0) {
     ent = MAINBOARD_V1;
+  } else if (strncmp(argv[3], "rts_trpl_inv", 12) == 0) {
+    ent = MAINBOARD_V2;
   }
   
   // Connect to bootloader

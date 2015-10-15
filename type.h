@@ -17,7 +17,7 @@ typedef unsigned long long u64;
 
 // Entry type
 typedef enum {
-  MAINBOARD_V1, MBLC
+  MAINBOARD_V1, MBLC, MAINBOARD_V2
 } entry_type_t;
 
 // Define serial port "handle" type for each platform

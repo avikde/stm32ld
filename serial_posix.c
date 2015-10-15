@@ -209,6 +209,11 @@ int ser_entry(ser_handler id, entry_type_t ent) {
     ser_ctl(id, TIOCM_DTR, 1);
     usleep(300000);
     ser_ctl(id, TIOCM_DTR, 0);
+  } else if (ent == MAINBOARD_V2) {
+    ser_ctl(id, TIOCM_RTS, 0);
+    ser_ctl(id, TIOCM_RTS, 1);
+    usleep(200000);
+    ser_ctl(id, TIOCM_RTS, 0);
   }
   return 0;
 }
