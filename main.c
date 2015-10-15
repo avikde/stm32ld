@@ -105,10 +105,15 @@ int main( int argc, const char **argv )
 
   // new entry type
   entry_type_t ent = MBLC;
-  if (strncmp(argv[3], "dtr_rts", 7) == 0) {
+  if (strncmp(argv[3], "mblc", 4) == 0) {
+    ent = MBLC;
+  } else if (strncmp(argv[3], "dtr_rts", 7) == 0) {
     ent = MAINBOARD_V1;
   } else if (strncmp(argv[3], "rts_trpl_inv", 12) == 0) {
     ent = MAINBOARD_V2;
+  } else {
+    fprintf(stderr, "Unrecognized entry type: %s\n", argv[3]);
+    exit( 1 );
   }
   
   // Connect to bootloader
