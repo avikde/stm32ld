@@ -170,14 +170,14 @@ int main( int argc, const char **argv )
     // Erase flash
     if( major == 3 )
     {
-      // printf( "Starting Extended Erase of FLASH memory. This will take some time ... Please be patient ...\n" );
+      printf("Extended erase...");
       if( stm32_extended_erase_flash() != STM32_OK )
       {
         fprintf( stderr, "Unable to extended erase chip\n" );
         exit( 1 );
       }
       else {
-        // printf( "Extended Erased FLASH memory\n" );
+        printf( "done\n" );
       }
     }
     else

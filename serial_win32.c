@@ -171,9 +171,9 @@ int ser_entry(ser_handler id, entry_type_t ent) {
     ser_ctl(id, CLRDTR);
   } else if (ent == MAINBOARD_V2) {
     ser_ctl(id, SETRTS);
-    usleep(100000);
+    usleep(200000);
     ser_ctl(id, CLRRTS);
-    usleep(100000);
+    usleep(200000);
   }
   return 0;
 }
