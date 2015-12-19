@@ -147,13 +147,15 @@ int main( int argc, const char **argv )
   }
   else
   {
-    printf( "chip ID: %04X\n", version );
+    printf( "chip ID: %04X\r\n", version );
     // if( version != CHIP_ID && version != CHIP_ID_ALT )
     // {
     //   fprintf( stderr, "Unsupported chip ID\n" );
     //   exit( 1 );
     // }
   }
+  fflush(stdout);
+  fflush(stderr);
   
   if( not_flashing == 0 )
   {
@@ -170,7 +172,8 @@ int main( int argc, const char **argv )
     // Erase flash
     if( major == 3 )
     {
-      printf("Extended erase...\n");
+      printf("Extended erase...\r\n");
+      fflush(stdout);
       if( stm32_extended_erase_flash() != STM32_OK )
       {
         fprintf( stderr, "Unable to extended erase chip\n" );
